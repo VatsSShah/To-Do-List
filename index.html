@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List App</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+        margin: 20px;
+      }
+
+      #todoApp {
+        width: 300px;
+        margin: 0 auto;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        margin: 5px 0;
+        background-color: #f8f8f8;
+        border-radius: 5px;
+      }
+
+      .deleteButton {
+        background-color: #e74c3c;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="todoApp">
+      <h2>Todo List</h2>
+      <input type="text" id="taskInput" placeholder="Add a new task" />
+      <button onclick="addTask()">Add</button>
+
+      <ul id="taskList"></ul>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        loadTasks();
+      });
+
+      function addTask() {
+        var taskInput = document.getElementById("taskInput");
+        var taskList = document.getElementById("taskList");
+
+        if (taskInput.value.trim() === "") {
+          alert("Please enter a task.");
+          return;
+        }
+
+        var taskItem = document.createElement("li");
+        taskItem.innerHTML = `
+                <span>${taskInput.value}</span>
+                <button class="deleteButton" onclick="deleteTask(this)">Delete</button>
+            `;
+
+        taskList.appendChild(taskItem);
+        saveTasks();
+        taskInput.value = "";
+      }
+
+      function deleteTask(button) {
+        var taskItem = button.parentNode;
+        var taskList = document.getElementById("taskList");
+        taskList.removeChild(taskItem);
+        saveTasks();
+      }
+
+      function saveTasks() {
+        var taskList = document.getElementById("taskList").innerHTML;
+        localStorage.setItem("tasks", taskList);
+      }
+
+      function loadTasks() {
+        var taskList = document.getElementById("taskList");
+        taskList.innerHTML = localStorage.getItem("tasks") || "";
+      }
+    </script>
+  </body>
+</html>
